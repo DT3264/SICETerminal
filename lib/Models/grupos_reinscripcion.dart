@@ -21,16 +21,28 @@ class GrupoReinscripcion {
     materia = d['Materia'];
     materiaClave = d['GrupoClave'];
     grupo = d['Grupo'];
+    var dias = [
+      d['Lunes'].toString(),
+      d['Martes'].toString(),
+      d['Miercoles'].toString(),
+      d['Jueves'].toString(),
+      d['Viernes'].toString(),
+    ];
     horarios = {
-      'Lunes': d['Lunes'].toString(),
-      'Martes': d['Martes'].toString(),
-      'Miercoles': d['Miercoles'].toString(),
-      'Jueves': d['Jueves'].toString(),
-      'Viernes': d['Viernes'].toString(),
+      'Lunes': getHorarioOrEmpty(dias[0]),
+      'Martes': getHorarioOrEmpty(dias[1]),
+      'Miercoles': getHorarioOrEmpty(dias[2]),
+      'Jueves': getHorarioOrEmpty(dias[3]),
+      'Viernes': getHorarioOrEmpty(dias[4]),
     };
   }
+
+  String getHorarioOrEmpty(String s){
+    return s.isNotEmpty ?s.substring(0, 2) + ' a '+ s.substring(6, 8) : '';
+  }
+
   @override
   String toString() {
-    return 'Grupo: ${grupo} - Docente: ${docente}';
+    return '${grupo} - ${docente}\n$horarios';
   }
 }

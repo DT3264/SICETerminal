@@ -5,13 +5,12 @@ WebServiceAlumnos wsA = WebServiceAlumnos();
 void main(List<String> args) async {
   var user = '';
   var pass = '';
-  if(args.isEmpty){
+  if (args.isEmpty) {
     print('Ingrese su usuario: ');
     user = stdin.readLineSync();
     print('Ingrese su contraseña: ');
     pass = stdin.readLineSync();
-  }
-  else{
+  } else {
     user = args[0];
     pass = args[1];
   }
@@ -28,7 +27,7 @@ void main(List<String> args) async {
     print('\n***********************');
     await handleOpt(opt);
     print('\n***********************\n');
-  }while(opt!=0);
+  } while (opt != 0);
 }
 
 void login(String user, String pass) async {
@@ -50,7 +49,7 @@ void printMenu() {
   print('0: Salir');
 }
 
-void handleOpt(int opt) async{
+void handleOpt(int opt) async {
   if (opt == 1) {
     await getParciales();
   } else if (opt == 2) {
@@ -63,7 +62,7 @@ void handleOpt(int opt) async{
     await getPromedio();
   } else if (opt == 6) {
     await getGruposAInscribir();
-  } else if(opt == 0){
+  } else if (opt == 0) {
     print('\nCerrando');
   }
 }
@@ -113,10 +112,12 @@ Future<void> getGruposAInscribir() async {
   print('Grupos a inscribir');
   var grupos = await wsA.getGruposAInscribirByAlumno(nextSemestre);
   if (grupos.isNotEmpty) {
-    for(var i=0; i<grupos.length; i++){
-      grupos[i].docente = await wsA.getDocente(grupos[i].materiaClave);
-      print(grupos[i]);
-    }
+    grupos.forEach((materia, grupos) {
+      print('\nMateria: $materia');
+      for (var grupo in grupos) {
+        print(grupo);
+      }
+    });
   } else {
     print('No hay grupos para inscribirse actualmente');
   }

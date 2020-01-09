@@ -12,6 +12,8 @@ import 'package:weasprofes/Models/promedio.dart';
 import 'package:weasprofes/Models/status.dart';
 import 'package:xml2json/xml2json.dart';
 
+import 'Models/grupos_reinscripcion.dart';
+
 class WebServiceAlumnos {
   var url = 'http://sicenet.itsur.edu.mx/WS/WSAlumnos.asmx';
   var urlDocentes = 'http://sicenet.itsur.edu.mx/WS/WSDocentes.asmx';
@@ -125,7 +127,8 @@ class WebServiceAlumnos {
     return promedio;
   }
 
-  Future<List<GrupoReinscripcion>> getGruposAInscribirByAlumno(int nextSemestre) async {
+  Future<Map<dynamic, dynamic>> getGruposAInscribirByAlumno(
+      int nextSemestre) async {
     var subUrl = 'getGruposAInscribirByAlumno';
     var response = await dioClient
         .post('${url}/${subUrl}', data: {'bytSemAInscribir': nextSemestre});
@@ -133,9 +136,19 @@ class WebServiceAlumnos {
     if (jsonString != '') {
       var jsonObj = json.decode(jsonString);
       var grupos = GruposReinscripcion.fromDynamic(jsonObj);
-      return grupos.gruposList;
+      for (var grupo in grupos.gruposList) {
+        grupo.docente = await getDocente(grupo.materiaClave);
+      }
+      var materias={};
+      for (var grupo in grupos.gruposList) {
+        if(materias.containsKey(grupo.materia)){
+          materias[grupo.materia].add(grupo);
+        }
+        materias.putIfAbsent(grupo.materia, ()=>[grupo]);
+      }
+      return materias;
     }
-    return [];
+    return {};
   }
 
   Future<String> getDocente(int claveGrupo) async {
