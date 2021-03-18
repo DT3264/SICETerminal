@@ -90,8 +90,8 @@ void getFinales() async {
 void getKardex() async {
   print('\nKardex ');
   var kardex = await wsA.kardexConPromedio();
-  print(kardex.promedio);
   kardex.materias.forEach((m) => print(m));
+  print(kardex.promedio);
 }
 
 void getCargaAcademica() async {

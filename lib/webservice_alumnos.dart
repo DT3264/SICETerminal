@@ -15,8 +15,8 @@ import 'package:xml2json/xml2json.dart';
 import 'Models/grupos_reinscripcion.dart';
 
 class WebServiceAlumnos {
-  var url = 'http://sicenet.itsur.edu.mx/WS/WSAlumnos.asmx';
-  var urlDocentes = 'http://sicenet.itsur.edu.mx/WS/WSDocentes.asmx';
+  var url = 'https://sicenet.itsur.edu.mx/WS/WSAlumnos.asmx';
+  var urlDocentes = 'https://sicenet.itsur.edu.mx/WS/WSDocentes.asmx';
   //var url = 'http://localhost:55786/SICE-NET/WS/WSAlumnos.asmx';
   //var urlDocentes = 'http://localhost:55786/SICE-NET/WS/WSDocentes.asmx';
   final dioClient = Dio();
@@ -30,7 +30,13 @@ class WebServiceAlumnos {
       'strContrasenia': pass,
       'tipoUsuario': '0'
     };
-    var response = await dioClient.post('${url}/${subUrl}', data: data);
+    var fullUrl = '${url}/${subUrl}';
+    //Petición inicial para obtener una cookie válida
+    var response = await dioClient.get(
+        fullUrl + '?strMatricula=${user}&strContrasenia=${pass}&tipoUsuario=0');
+    //Ahora con la cookie, podemos hacer peticiones
+    response = await dioClient.post(fullUrl, data: data);
+
     var jsonData = response.data;
     var jsonString = jsonData['d'];
     Status status;
@@ -139,12 +145,12 @@ class WebServiceAlumnos {
       for (var grupo in grupos.gruposList) {
         grupo.docente = await getDocente(grupo.materiaClave);
       }
-      var materias={};
+      var materias = {};
       for (var grupo in grupos.gruposList) {
-        if(materias.containsKey(grupo.materia)){
+        if (materias.containsKey(grupo.materia)) {
           materias[grupo.materia].add(grupo);
         }
-        materias.putIfAbsent(grupo.materia, ()=>[grupo]);
+        materias.putIfAbsent(grupo.materia, () => [grupo]);
       }
       return materias;
     }

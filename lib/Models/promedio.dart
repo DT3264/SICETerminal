@@ -17,9 +17,11 @@ class Promedio {
 
   @override
   String toString() {
-    var s = 'Promedio general: $promedioGral, Créditos: $cdtsAcum de $cdtsPlan';
-    s +=
-        ', Materias cursadas: $matCursadas, Materias aprovadas: $matAprobadas, Porcentaje de carrera: $avanceCdts';
-    return s;
+    var str = 'Promedio general: $promedioGral\n';
+    str += 'Créditos: $cdtsAcum de $cdtsPlan\n';
+    str += 'Materias cursadas: $matCursadas\n';
+    str += 'Materias aprovadas: $matAprobadas\n';
+    str += 'Porcentaje de carrera: $avanceCdts\n';
+    return str;
   }
 }

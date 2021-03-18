@@ -31,6 +31,6 @@ class MateriaKardex {
   @override
   String toString() {
     var califString = calif.toString().padLeft(3);
-    return '${materia.padRight(30)}Calificación: $califString, Acreditado: $acred, Créditos: $cdts';
+    return '${materia.padRight(25)}Calificación: ${califString.padRight(3)}, Acreditado: ${acred.padRight(14)}, Créditos: $cdts';
   }
 }
